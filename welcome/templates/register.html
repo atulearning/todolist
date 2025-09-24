@@ -1,0 +1,407 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'image/todo.ico' %}" type="image/x-icon">
+    <title>注册界面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                        accent: '#0ea5e9',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .transition-custom {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .form-input-focus {
+                @apply focus:ring-2 focus:ring-primary/50 focus:border-primary focus:outline-none;
+            }
+            .btn-hover {
+                @apply hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-light to-blue-50 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-4xl">
+        <!-- 左右布局容器 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <!-- 左侧图片区域 -->
+            <div class="hidden md:block">
+                <div class="rounded-2xl overflow-hidden shadow-xl h-full flex items-center justify-center bg-white">
+                    <!-- 图片占位符，您可以替换为实际图片 -->
+                    <img 
+                        src="{% static 'image/lookingphone.jpg' %}"
+                        alt="注册界面配图" 
+                        class="w-full h-full object-cover"
+                    >
+                </div>
+            </div>
+            
+            <!-- 右侧注册区域 -->
+            <div class="w-full">
+                <!-- 注册卡片 -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl">
+                    <!-- 顶部装饰条 -->
+                    <div class="h-2 bg-white"></div>
+                    
+                    <!-- 卡片内容 -->
+                    <div class="p-8">
+                        <!-- 标题 -->
+                        <div class="text-center mb-8">
+                            <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-dark mb-2">创建账户</h1>
+                            <p class="text-secondary">请填写信息完成注册</p>
+                        </div>
+                        
+                        <!-- 注册表单 -->
+                        <form id="registerForm" class="space-y-5">
+                            {% csrf_token %}
+                            <!-- 用户名 -->
+                            <div class="space-y-2">
+                                <label for="username" class="block text-sm font-medium text-dark">用户名</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                    <input type="text" id="username" name="username" 
+                                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 form-input-focus transition-custom"
+                                        placeholder="请输入用户名" required>
+                                </div>
+                                <p id="usernameError" class="text-danger text-sm hidden">用户名不能为空</p>
+                            </div>
+                            
+                            <!-- 邮箱 -->
+                            <div class="space-y-2">
+                                <label for="email" class="block text-sm font-medium text-dark">邮箱</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                    <input type="email" id="email" name="email" 
+                                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 form-input-focus transition-custom"
+                                        placeholder="请输入邮箱" required>
+                                </div>
+                                <p id="emailError" class="text-danger text-sm hidden">请输入有效的邮箱地址</p>
+                            </div>
+                            
+                            <!-- 密码 -->
+                            <div class="space-y-2">
+                                <label for="password" class="block text-sm font-medium text-dark">密码</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    <input type="password" id="password" name="password" 
+                                        class="w-full pl-10 pr-10 py-3 rounded-lg border border-gray-300 form-input-focus transition-custom"
+                                        placeholder="请输入密码" required>
+                                    <button type="button" id="togglePassword" 
+                                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-secondary hover:text-primary transition-custom">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                </div>
+                                <p id="passwordError" class="text-danger text-sm hidden">密码长度至少为8位</p>
+                            </div>
+                            
+                            <!-- 确认密码 -->
+                            <div class="space-y-2">
+                                <label for="confirmPassword" class="block text-sm font-medium text-dark">确认密码</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" 
+                                        class="w-full pl-10 pr-10 py-3 rounded-lg border border-gray-300 form-input-focus transition-custom"
+                                        placeholder="请再次输入密码" required>
+                                    <button type="button" id="toggleConfirmPassword" 
+                                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-secondary hover:text-primary transition-custom">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                </div>
+                                <p id="confirmPasswordError" class="text-danger text-sm hidden">两次输入的密码不一致</p>
+                            </div>
+                            
+                            <!-- 注册按钮 -->
+                            <button type="submit" 
+                                class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg shadow-md btn-hover">
+                                注册
+                            </button>
+                        </form>
+                        
+                        <!-- 登录链接 -->
+                        <div class="mt-6 text-center">
+                            <p class="text-secondary text-sm">
+                                已有账户? <a href="{% url 'welcome:login' %}" class="text-primary font-medium hover:underline">立即登录</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 页脚 -->
+                <p class="text-center text-secondary text-sm mt-6">
+                    &copy; 登入界面模板参考. 保留所有权利. created by atu.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 表单验证
+        const registerForm = document.getElementById('registerForm');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const usernameError = document.getElementById('usernameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+        // 用户名验证
+        username.addEventListener('input', async () => {
+            const usernameValue = username.value.trim();
+            if (usernameValue) {
+                try {
+                    const response = await fetch(`{% url 'welcome:check_username' %}?username=${usernameValue}`);
+                    const data = await response.json();
+                    if (data.exists) {
+                        usernameError.textContent = '用户名已存在';
+                        usernameError.classList.remove('hidden');
+                    } else {
+                        usernameError.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('请求出错:', error);
+                }
+            } else {
+                usernameError.textContent = '用户名不能为空';
+                usernameError.classList.remove('hidden');
+            }
+        });
+
+        // 邮箱验证
+        email.addEventListener('input', async () => {
+            const emailValue = email.value.trim();
+            if (emailValue) {
+                try {
+                    const response = await fetch(`{% url 'welcome:check_email' %}?email=${emailValue}`);
+                    const data = await response.json();
+                    if (data.exists) {
+                        emailError.textContent = '邮箱已存在';
+                        emailError.classList.remove('hidden');
+                    } else {
+                        emailError.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('请求出错:', error);
+                }
+            } else {
+                emailError.textContent = '邮箱不能为空';
+                emailError.classList.remove('hidden');
+            }
+        });
+
+        // 邮箱验证函数
+        function validateEmail(value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(value);
+        }
+
+        // 获取 CSRF token 的函数
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // 表单提交处理
+        registerForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            // 重置错误提示
+            usernameError.classList.add('hidden');
+            emailError.classList.add('hidden');
+            passwordError.classList.add('hidden');
+            confirmPasswordError.classList.add('hidden');
+
+            // 验证用户名
+            const usernameValue = username.value.trim();
+            if (!usernameValue) {
+                usernameError.textContent = '用户名不能为空';
+                usernameError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                try {
+                    const response = await fetch(`{% url 'welcome:check_username' %}?username=${usernameValue}`);
+                    const data = await response.json();
+                    if (data.exists) {
+                        usernameError.textContent = '用户名已存在';
+                        usernameError.classList.remove('hidden');
+                        isValid = false;
+                    }
+                } catch (error) {
+                    console.error('请求出错:', error);
+                    isValid = false;
+                }
+            }
+
+            // 验证邮箱
+            const emailValue = email.value.trim();
+            if (!emailValue) {
+                emailError.textContent = '邮箱不能为空';
+                emailError.classList.remove('hidden');
+                isValid = false;
+            } else if (!validateEmail(emailValue)) {
+                emailError.textContent = '请输入有效的邮箱地址';
+                emailError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                try {
+                    const response = await fetch(`{% url 'welcome:check_email' %}?email=${emailValue}`);
+                    const data = await response.json();
+                    if (data.exists) {
+                        emailError.textContent = '邮箱已存在';
+                        emailError.classList.remove('hidden');
+                        isValid = false;
+                    }
+                } catch (error) {
+                    console.error('请求出错:', error);
+                    isValid = false;
+                }
+            }
+
+            // 验证密码
+            if (!password.value.trim()) {
+                passwordError.textContent = '密码不能为空';
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            } else if (password.value.length < 8) {
+                passwordError.textContent = '密码长度至少为8位';
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            }
+
+            // 验证确认密码
+            if (!confirmPassword.value.trim()) {
+                confirmPasswordError.textContent = '请确认密码';
+                confirmPasswordError.classList.remove('hidden');
+                isValid = false;
+            } else if (password.value !== confirmPassword.value) {
+                confirmPasswordError.textContent = '两次输入的密码不一致';
+                confirmPasswordError.classList.remove('hidden');
+                isValid = false;
+            }
+
+            // 如果验证通过，提交注册数据
+            if (isValid) {
+                const submitButton = registerForm.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 注册中...';
+
+                try {
+                    const csrftoken = getCookie('csrftoken');
+                    const response = await fetch(`{% url 'welcome:register' %}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: JSON.stringify({
+                            username: usernameValue,
+                            email: emailValue,
+                            password: password.value.trim()
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert('注册成功！请前往登录');
+                        // 修正 url 标签语法
+                        window.location.href = "{% url 'welcome:login' %}";
+                    } else {
+                        alert(data.error || '注册失败，请重试');
+                    }
+                } catch (error) {
+                    console.error('请求出错:', error);
+                    alert('注册失败，请重试');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalText;
+                }
+            }
+        });
+
+        // 密码显示/隐藏切换
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // 切换图标
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        // 确认密码显示/隐藏切换
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+
+            // 切换图标
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        // 添加动画效果
+        document.querySelectorAll('input, button').forEach(el => {
+            el.addEventListener('focus', () => {
+                el.closest('.space-y-2')?.classList.add('scale-[1.01]');
+            });
+            el.addEventListener('blur', () => {
+                el.closest('.space-y-2')?.classList.remove('scale-[1.01]');
+            });
+        });
+    </script>
+</body>
+</html>    

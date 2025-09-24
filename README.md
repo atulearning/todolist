@@ -37,8 +37,8 @@
 
 1. **克隆项目**
    ```bash
-   git clone [你的项目地址]
-   cd [项目文件夹名]
+   cd [你的项目路径]
+   git clone https://github.com/atulearning/todolist.git
    ```
 
 2. **创建虚拟环境**
@@ -341,6 +341,7 @@ fetch('/index/total_image/', {
 
 
 > 💡 **小贴士**：边学边做,敢于突破!请大佬们轻点骂(●'◡'●),我会努力完善这个项目的
+
 
 
 

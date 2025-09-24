@@ -147,18 +147,18 @@ Django项目目录
 ### 1.查看某天任务列表
 点击日历里面的具体日期查看当天的所有任务,并有添加功能,点击任务可以就行修改和删除操作
 
-![image-20250924083758006](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20250924083758006.png)
+![屏幕截图 2025-09-24 083621](./readmefile/屏幕截图 2025-09-24 083621.png)
 
 ### 2.数据可视化
-点击完成统计查看近7天的,与近30天的一个简单的数据统计图
+点击***完成统计***查看近7天的,与近30天的一个简单的数据统计图
 
-![屏幕截图 2025-09-24 083005](C:\Users\Lenovo\Pictures\Screenshots\屏幕截图 2025-09-24 083005.png)
+![屏幕截图 2025-09-24 083005](./readmefile/屏幕截图 2025-09-24 083005.png)
 
 ### 3.导出当天任务的excel表格
 
 点击***导出任务到excel***就下载当前日期下任务的excel表格
 
-![image-20250924091132276](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20250924091132276.png)
+![屏幕截图 2025-09-24 091124](./readmefile/屏幕截图 2025-09-24 091124.png)
 
 ## 🚀 API接口
 

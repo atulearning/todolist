@@ -334,6 +334,9 @@ fetch('/index/total_image/', {
 如果项目有帮助，请给个Star支持一下！
 
 [![Star History Chart](https://api.star-history.com/svg?repos=[atulearning]/[tdolist])](https://star-history.com/#[atulearning]/[tdolist])
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=%5Batulearning%5D/%5Btdolist%5D&type=Date)](https://www.star-history.com/#%5Batulearning%5D/%5Btdolist%5D&Date)
 
 ---
 
@@ -341,4 +344,5 @@ fetch('/index/total_image/', {
 
 
 > 💡 **小贴士**：边学边做,敢于突破!请大佬们轻点骂(●'◡'●),我会努力完善这个项目的
+
 
